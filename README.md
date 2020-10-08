@@ -1,9 +1,8 @@
-﻿## Practical Language Processing Project Team 15
+﻿# Practical Language Processing Project Team 15 - Gastronomy Advisor (Chatbot)
 <img src="Images/chatbot.png"
      style="float: left; margin-right: 0px;" />
 
 <br>
-## Gastronomy Chatbot
 
 ## SECTION 1 : EXECUTIVE SUMMARY / PAPER ABSTRACT
 
