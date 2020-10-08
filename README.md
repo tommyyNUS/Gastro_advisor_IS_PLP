@@ -1,18 +1,15 @@
-﻿# Agent-IPA-2020-03-21-GRP-Etika
-
-## SECTION 1 : S.A.R.A AIRBNB Agent
-## NUS ISS Intelligent Process Agent
+﻿## Practical Language Processing Project Team 15
 <img src="Images/chatbot.png"
      style="float: left; margin-right: 0px;" />
 
 <br>
+## Gastronomy Chatbot
 
-
-## SECTION 2 : EXECUTIVE SUMMARY / PAPER ABSTRACT
+## SECTION 1 : EXECUTIVE SUMMARY / PAPER ABSTRACT
 
 To be completed...
 
-## SECTION 3 : CREDITS / PROJECT CONTRIBUTION
+## SECTION 2 : CREDITS / PROJECT CONTRIBUTION
 
 | Official Full Name  | Student ID (MTech Applicable)  | Work Items (Who Did What) | Email (Optional) |
 | :------------ |:---------------:| :-----| :-----|
@@ -21,11 +18,11 @@ To be completed...
 | RITESH MUNJAL | A0195304H | Refer to individual report | E0384935@u.nus.edu |
 | SANTHIYAPILLAI RAJEEVAN PAUL | A0195399E | Refer to individual report | E0385030@u.nus.edu |
 
-## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
+## SECTION 3 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
 
 [Gastronomy Advisor Video](https://www.youtube.com/)
 
-## SECTION 5 : USER GUIDE
+## SECTION 4 : USER GUIDE
 For a more detailed look at user guide, please refer to appendix 1 of the report for the user guide. 
 
 Please ensure you are using python 3.6 or higher.
@@ -65,10 +62,10 @@ Click "Import From Zip" and select the IPA-AGENT zip file. Type in "IMPORT" into
 
 -----------------------------------------------------------------------------------------------------
 
-## SECTION 6 : PROJECT REPORT / PAPER
+## SECTION 5 : PROJECT REPORT / PAPER
 
 [Download the Project Report](http://tiny.cc/q2m5nz)
 
-## SECTION 7 : MISCELLANEOUS
+## SECTION 6 : MISCELLANEOUS
 
 -----
