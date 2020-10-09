@@ -1,3 +1,3 @@
-bot_token = "place your token here"
-bot_user_name = "bot username"
-URL = "the heroku app link that we will create later"
+bot_token = "1382892237:AAHeA2C1kvrN2eckNpN9z6j7PCt0wiKj36Q"
+bot_user_name = "Gastrotomi_bot"
+URL = "place your ngrok https link here. e.g. https://abcde121258.ngrok.io/   "
