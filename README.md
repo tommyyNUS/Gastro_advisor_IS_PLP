@@ -30,15 +30,21 @@ Once you have downloaded and unzipped the project file, CD into your project roo
 This guide assumes that python 3.6 or higher has already been installed and pip has been installed as well.
 
 **Step 1**. Install virtualenv.
+
 For Mac: python3 -m pip install --user virtualenv
+
 For Windows: py -m pip install --user virtualenv
 
 **Step 2**. Create a python env.
+
 For Mac: python3 -m venv env
+
 For Windows: py -m venv env
 
 **Step 3**. Activate the python env. You should see (env) next to your command line.
+
 For Mac: "source env/bin/activate"
+
 For Windows: "env\Scripts\activate"
 
 **Step 4**. In the command prompt/terminal CD to the project folder "<your-file-path>/Gastro_advisor_IS_PLP”. Enter "pip install -r requirements.txt" OR "pip3 install -r requirements.txt".  This will install all the required dependencies.
