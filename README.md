@@ -28,6 +28,7 @@ Please ensure you are using python 3.6 or higher.
 Once you have downloaded and unzipped the project file, CD into your project root folder "<your-file-path>/Gastro_advisor_IS_PLP"
 
 This guide assumes that python 3.6 or higher has already been installed and pip has been installed as well.
+
 **Step 1**. Install virtualenv.
 For Mac: python3 -m pip install --user virtualenv
 For Windows: py -m pip install --user virtualenv
