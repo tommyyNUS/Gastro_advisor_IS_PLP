@@ -24,8 +24,8 @@ def detect_intent(model,request):
 
     subj,pred,obj,location = extract_triple (model,request)
 
-    if(detect_keyword(["recommendation"],pred) and detect_keyword(["u","you"],subj)): 
-        predicate_grammar = True 
+    if (~(detect_keyword(["recommendation","recommend"],pred) ^ detect_keyword(["u","you"],subj))): predicate_grammar = True 
+    elif (~(detect_keyword(["recommendation"],pred) ^ detect_keyword(["i"],subj))): predicate_grammar = True 
     else: predicate_grammar = False
 
     get_time_condition = detect_keyword(["time","day","date"],obj)
@@ -91,7 +91,7 @@ def extract_triple(model,sentence):
     #subject,predicate,object
     obj,pred = reassign_triple(remove_stopwords(obj),pred,["recomndations","recomndation","recommendations","recommendation","suggestions","suggestion"," recomndations"," recomndation"," recommendations"," recommendation"," suggestions"," suggestion"])
     obj,location = get_location(obj,["north","south","east","west","northeast","north east","north-east","central"])
-    #print (subj,pred,obj)
+    print (subj,pred,obj)
 
     return (subj,pred,obj,location)
 
