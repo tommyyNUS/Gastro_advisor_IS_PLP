@@ -10,29 +10,27 @@ TOKEN = bot_token
 bot = telegram.Bot(token=TOKEN)
 
 #Initialize Chatbot
-from intent import check_intent,detect_intent
-from config import initialize
+from chatbot.intent import check_intent,detect_intent
+from chatbot.config import initialize
+from chatbot.train_corpus import train_data
 
 import spacy
 import en_core_web_md
-global MODE
-MODE = "TELEGRAM"
 
 print("Initializing...")
-
-nlp = spacy.load("en_core_web_md", disable=["ner"])
-
 chatbot = initialize()
 
-print("Chatbot Ready.")
-
-#Check for Debug Mode
+#Check for Mode
+global MODE
 if (len(sys.argv) == 2): 
     if (sys.argv[1]=="-debug"): MODE = "DEBUG"
+    elif (sys.argv[1]=="-train"): MODE = "TRAIN"
+else: MODE = "TELEGRAM"
 
+#Set Mode
 if (MODE == "DEBUG"):
+    nlp = spacy.load("en_core_web_md", disable=["ner"])
     print("Hello, you are in debug mode, how can i help you?")
-
     while 1:
         request = input("User: ")
 
@@ -42,6 +40,17 @@ if (MODE == "DEBUG"):
 
         print("Bot: ", response)
         if (intent=="ExitApp"): sys.exit()
+
+elif (MODE == "TRAIN"): 
+    train_data(chatbot)
+    sys.exit()
+
+
+
+nlp = spacy.load("en_core_web_md", disable=["ner"])
+chatbot = initialize()
+print("Chatbot Ready.")
+
 
 app = Flask(__name__)
 

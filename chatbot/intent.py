@@ -32,15 +32,15 @@ def detect_intent(model,request):
     get_food_condition = detect_keyword(["eat","recommend","find","get","crave","want","hungry","suggest","have","serve","look","recommendation","recommendations"],pred)
     if get_time_condition: 
         intent = "GetTime"
-        print("Intent Detected - ", intent)
         intent_detected = 1
     elif get_food_condition and predicate_grammar:
         intent = "GetFood"
-        print("Intent Detected - ", intent)
         intent_detected = 1
     else:
-        intent = "None"        
+        intent = "None"     
         intent_detected = 0
+
+    print("Intent Detected - ", intent)   
 
     if (len(location)==0): location = "whole"
     if (len(obj)==0): obj = "any food"
@@ -52,7 +52,7 @@ def remove_stopwords(textarray):
         textarray[:] = [x.replace(stopwords,"") for x in textarray]
     textarray[:] = [x.replace("town","central") for x in textarray]
 
-    for stopwords in ["place","me","you","restaurant","singapore","something"]:
+    for stopwords in ["place","me","you","restaurant","singapore","something","food"]:
         if stopwords in textarray: textarray.remove(stopwords)
 
     return textarray
@@ -75,6 +75,10 @@ def reassign_triple(source,target,wordlist):
 def extract_triple(model,sentence):
     subj,pred,obj=[],[],[]
     location=[]
+
+    #Special Food Rules
+    sentence,obj = detect_specialfood(sentence,obj)
+
     doc = model(sentence)
 
     #Account for NGram where N > 1
@@ -91,7 +95,8 @@ def extract_triple(model,sentence):
     #subject,predicate,object
     obj,pred = reassign_triple(remove_stopwords(obj),pred,["recomndations","recomndation","recommendations","recommendation","suggestions","suggestion"," recomndations"," recomndation"," recommendations"," recommendation"," suggestions"," suggestion"])
     obj,location = get_location(obj,["north","south","east","west","northeast","north east","north-east","central"])
-    print (subj,pred,obj)
+
+    print ("Triples Extracted: ",subj,pred,obj)
 
     return (subj,pred,obj,location)
 
@@ -99,3 +104,9 @@ def detect_keyword(searchterms,item):
     array = []
     for x in searchterms: array.append(x in item)
     return any(array)
+
+def detect_specialfood(sentence,obj):
+    if (sentence.find("bak kut teh") != -1): 
+        sentence = sentence.replace("bak kut teh","food")
+        obj.append("bak kut teh")
+    return sentence,obj
