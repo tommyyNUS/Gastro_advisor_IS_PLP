@@ -29,7 +29,7 @@ def detect_intent(model,request):
     else: predicate_grammar = False
 
     get_time_condition = detect_keyword(["time","day","date"],obj)
-    get_food_condition = detect_keyword(["eat","recommend","find","get","crave","want","hungry","suggest","have","serve","look","recommendation","recommendations"],pred)
+    get_food_condition = detect_keyword(["eat","recommend","find","get","crave","want","wan","hungry","suggest","have","serve","look","recommendation","recommendations"],pred)
     if get_time_condition: 
         intent = "GetTime"
         intent_detected = 1
@@ -48,11 +48,11 @@ def detect_intent(model,request):
     return intent_detected,intent,obj,location
 
 def remove_stopwords(textarray):
-    for stopwords in ["a ","the ","good ","best ","delicious ","some ","marvellous ","decent ","nice "," side","very "," food"," restaurant"," cuisine","any ",","," any ","what "]: 
+    for stopwords in ["a ","the ","good ","best ","delicious ","some ","marvellous ","decent ","nice "," side","very "," food"," restaurant"," restaurants"," cuisine","any ",","," any ","what "]: 
         textarray[:] = [x.replace(stopwords,"") for x in textarray]
     textarray[:] = [x.replace("town","central") for x in textarray]
 
-    for stopwords in ["place","me","you","restaurant","singapore","something","food"]:
+    for stopwords in ["place","me","you","restaurant","singapore","something","food","foods"]:
         if stopwords in textarray: textarray.remove(stopwords)
 
     return textarray
@@ -106,7 +106,9 @@ def detect_keyword(searchterms,item):
     return any(array)
 
 def detect_specialfood(sentence,obj):
-    if (sentence.find("bak kut teh") != -1): 
-        sentence = sentence.replace("bak kut teh","food")
-        obj.append("bak kut teh")
+    specialfoodlist = ["bak kut teh","fish and chip"]
+    for x in specialfoodlist:
+        if (sentence.find(x) != -1): 
+            sentence = sentence.replace(x,"food")
+            obj.append(x)
     return sentence,obj
