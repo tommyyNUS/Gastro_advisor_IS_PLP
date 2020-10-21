@@ -1,6 +1,0 @@
-,id,rest_name,rest_address,rest_region,rest_type,rest_food_type,rest_food_rating,rest_srvc_rating,rest_ambi_rating,rest_prce_rating,rest_misc_rating,rest_rating
-0,1,Ichiban Sushi,123 Orchard Road,Central,"Japaneese,Traditional",Sushi#Sake#Saba Hot Plate,9.5,6.0,7.0,5.0,9.8,9.0
-1,2,McDonalds,123 Ang Mo Kio,North,"FastFood,Modern",Burger#Chicken,8.5,6.0,7.5,5.0,9.8,8.0
-2,3,PizzaHut,123 Suntec City,Central,"FastFood,Modern",Pizza#Chicken,8.0,6.0,8.5,5.0,9.8,8.0
-3,4,Soup Spoon,123 Sunte City,Central,Soup&Salad,Soup#Salad#Bun#Mushroom,7.5,6.0,6.5,5.0,9.8,8.5
-4,5,Anjappar Chettinaad Restaurant,123 Little india,South,"Indian,Traditional",Briyani#Prata#Tandoori Chicken,9.0,6.0,7.0,5.0,9.8,9.0
