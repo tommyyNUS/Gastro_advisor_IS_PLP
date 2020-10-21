@@ -55,7 +55,7 @@ Take note of the https link. It should look something like this "https://f34bb6f
 
 **Step 6**. Copy the https ngrok link and go to constants.py file in the project folder. Paste the link into the variable 'URL'. Include a forward slash at the end of the link, it should look like this 'https://f34bb6f6.ngrok.io/'
 
-**Step 7**. After step 4's installation has completed, from the command prompt CD to the project root folder "<your-file-path>/Gastro_advisor_IS_PLP” enter "flask run". This will deploy your server locally on your pc. Do take note that your localhost should be deploying on port 5000 "http://127.0.0.1:5000/"
+**Step 7**. After step 4's installation has completed, from the command prompt CD to the project root folder "<your-file-path>/Gastro_advisor_IS_PLP” enter "python app.py". This will deploy your server locally on your pc. Do take note that your localhost should be deploying on port 5000 "http://127.0.0.1:5000/"
 
 **Step 8**. Next, go to your web browser and paste your ngrok https link to check if it can connect locally. You should see this text in the browser 'I am running flask server locally...'.
 

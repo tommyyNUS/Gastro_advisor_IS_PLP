@@ -22,29 +22,29 @@ print("Initializing...")
 chatbot = initialize()
 
 #Check for Mode
-#global MODE
-#if (len(sys.argv) == 2): 
-#    if (sys.argv[1]=="-debug"): MODE = "DEBUG"
-#    elif (sys.argv[1]=="-train"): MODE = "TRAIN"
-#else: MODE = "TELEGRAM"
+global MODE
+if (len(sys.argv) == 2): 
+    if (sys.argv[1]=="-debug"): MODE = "DEBUG"
+    elif (sys.argv[1]=="-train"): MODE = "TRAIN"
+else: MODE = "TELEGRAM"
 
 #Set Mode
-#if (MODE == "DEBUG"):
-#    nlp = spacy.load("en_core_web_md", disable=["ner"])
-#    print("Hello, you are in debug mode, how can i help you?")
-#    while 1:
-#        request = input("User: ")
+if (MODE == "DEBUG"):
+    nlp = spacy.load("en_core_web_md", disable=["ner"])
+    print("Hello, you are in debug mode, how can i help you?")
+    while 1:
+        request = input("User: ")
 
-#        intent_detected,intent,obj,location,graded_aspect = detect_intent(nlp,request)
-#        if (intent_detected == 1): response = check_intent(intent,obj,location,graded_aspect)
-#        else: response = chatbot.get_response(request)
+        intent_detected,intent,obj,location,graded_aspect = detect_intent(nlp,request)
+        if (intent_detected == 1): response = check_intent(intent,obj,location,graded_aspect)
+        else: response = chatbot.get_response(request)
 
-#        print("Bot: ", response)
-#        if (intent=="ExitApp"): sys.exit()
+        print("Bot: ", response)
+        if (intent=="ExitApp"): sys.exit()
 
-#elif (MODE == "TRAIN"): 
-#    train_data(chatbot)
-#    sys.exit()
+elif (MODE == "TRAIN"): 
+    train_data(chatbot)
+    sys.exit()
 
 nlp = spacy.load("en_core_web_md", disable=["ner"])
 chatbot = initialize()
