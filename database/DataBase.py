@@ -177,6 +177,16 @@ class DataBase:
     
         return rows
 
+    def query(self, x):
+        sql = x
+        
+        cur = self.SQLITE_CONN.cursor()
+        #print("sql", sql, srch_str)
+        cur.execute(sql,[])
+        rows = cur.fetchall()
+    
+        return rows
+
 ########################################
 ########################################
 """

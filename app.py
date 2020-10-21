@@ -34,8 +34,8 @@ if (MODE == "DEBUG"):
     while 1:
         request = input("User: ")
 
-        intent_detected,intent,obj,location = detect_intent(nlp,request)
-        if (intent_detected == 1): response = check_intent(intent,obj,location)
+        intent_detected,intent,obj,location,graded_aspect = detect_intent(nlp,request)
+        if (intent_detected == 1): response = check_intent(intent,obj,location,graded_aspect)
         else: response = chatbot.get_response(request)
 
         print("Bot: ", response)
@@ -63,9 +63,9 @@ def respond():
     text = update.message.text.encode('utf-8').decode()
 
     #Get response for restaurant recommendations
-    intent_detected,intent,obj,location = detect_intent(nlp,text)
+    intent_detected,intent,obj,location,graded_aspect = detect_intent(nlp,text)
 
-    if (intent_detected == 1): response = str(check_intent(intent,obj,location))
+    if (intent_detected == 1): response = str(check_intent(intent,obj,location,graded_aspect))
     else: response = str(chatbot.get_response(text))
 	
     #Prepare message to send back to user
