@@ -2,11 +2,11 @@
 """
 Created on Sat Oct 17 20:25:52 2020
 
-@author: rajpaul
+@author: Paul S.R
 """
 
 import sqlite3
-
+from sqlite3 import Error
 
 class DataBase:
     # tasks table
@@ -21,8 +21,13 @@ class DataBase:
                                         rest_srvc_rating real,
                                         rest_ambi_rating real,
                                         rest_prce_rating real,
-                                        rest_misc_rating real,
-                                        rest_rating real
+                                        rest_rating real,
+                                        w_fs_rating real,
+                                        w_fa_rating real,
+                                        w_fp_rating real,
+                                        w_fsa_rating real,
+                                        w_fsp_rating real,
+                                        w_rest_rating real
                                     ); '''
     
     SQLITE_CONN = None
@@ -41,7 +46,7 @@ class DataBase:
     
     def connect_to_db(self):
         try:
-            sqliteConn = sqlite3.connect('gastrotommy.db')
+            sqliteConn = sqlite3.connect('C:\\NUS_ISS_MTech\Year 2\Semester 2 - Practical Natural Language Processing\PLP CA\\database\gastrotommy.db')
             cursor = sqliteConn.cursor()
             print("Database created and Successfully Connected to SQLite")
         
@@ -51,8 +56,8 @@ class DataBase:
             print("SQLite Database Version is: ", record)
             cursor.close()
         
-        except sqlite3.Error as error:
-            print("Error while connecting to sqlite", error)
+        except Error as e:
+            print("Error while connecting to sqlite", e)
     
         return sqliteConn        
     
@@ -63,12 +68,24 @@ class DataBase:
         except Error as e:
             print("ERROR while creating table", e)
     
+    def empty_table(self):
+        sql = ''' DELETE FROM restaurant; '''
+        try:
+            c = self.SQLITE_CONN.cursor()
+            c.execute(sql)
+            print("Table restaurant is empty now.")
+        except Error as e:
+            print("ERROR while emptying table", e)
+    
     def insert_records(self, record):
-        sql = ''' INSERT INTO restaurant (id,
+        sql = ''' INSERT INTO restaurant (id, 
         rest_name,rest_address,rest_region,rest_type,rest_food_type,
-        rest_food_rating,rest_ambi_rating,rest_srvc_rating,
-        rest_prce_rating,rest_misc_rating,
-        rest_rating ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?); '''
+        rest_food_rating,rest_srvc_rating,rest_ambi_rating,
+        rest_prce_rating, rest_rating,
+        w_fs_rating, w_fa_rating, w_fp_rating,
+        w_fsa_rating, w_fsp_rating,
+        w_rest_rating)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?); '''
         
         cur = self.SQLITE_CONN.cursor()
         cur.execute(sql, record)
@@ -157,32 +174,12 @@ class DataBase:
     
         return rows
     
-    def fetch_topx_by_misc_rating(self, x):
-        sql = " SELECT * FROM restaurant ORDER BY rest_misc_rating DESC LIMIT ?;"
-        
-        cur = self.SQLITE_CONN.cursor()
-        #print("sql", sql, srch_str)
-        cur.execute(sql, [x])
-        rows = cur.fetchall()
-    
-        return rows
-    
     def fetch_topx_by_overall_rating(self, x):
         sql = " SELECT * FROM restaurant ORDER BY rest_rating DESC LIMIT ?;"
         
         cur = self.SQLITE_CONN.cursor()
         #print("sql", sql, srch_str)
         cur.execute(sql, [x])
-        rows = cur.fetchall()
-    
-        return rows
-
-    def query(self, x):
-        sql = x
-        
-        cur = self.SQLITE_CONN.cursor()
-        #print("sql", sql, srch_str)
-        cur.execute(sql,[])
         rows = cur.fetchall()
     
         return rows
@@ -195,26 +192,27 @@ if __name__ == '__main__':
     try:
         db = DataBase()
         db.create_tables()
+                
         
         rest = (1, 'Ichiban Sushi', '123 Orchard Road', 'Central', 
                 'Japaneese,Traditional', 'Sushi#Sake#Saba Hot Plate',
-                9.5, 7.0, 6.0, 5.0, 9.8, 9.0)
+                9.5, 7.0, 6.0, 5.0, 9.0)
         db.insert_records(rest)
         rest = (2, 'McDonalds', '123 Ang Mo Kio', 'North', 
                 'FastFood,Modern', 'Burger#Chicken',
-                8.5, 7.5, 6.0, 5.0, 9.8, 8.0)
+                8.5, 7.5, 6.0, 5.0, 8.0)
         db.insert_records(rest)
         rest = (3, 'PizzaHut', '123 Suntec City', 'Central', 
                 'FastFood,Modern', 'Pizza#Chicken',
-                8.0, 8.5, 6.0, 5.0, 9.8, 8.0)
+                8.0, 8.5, 6.0, 5.0, 8.0)
         db.insert_records(rest)
         rest = (4, 'Soup Spoon', '123 Sunte City', 'Central', 
                 'Soup&Salad', 'Soup#Salad#Bun#Mushroom',
-                7.5, 6.5, 6.0, 5.0, 9.8, 8.5)
+                7.5, 6.5, 6.0, 5.0, 8.5)
         db.insert_records(rest)
         rest = (5, 'Anjappar Chettinaad Restaurant', '123 Little india', 'South', 
                 'Indian,Traditional', 'Briyani#Prata#Tandoori Chicken',
-                9.0, 7.0, 6.0, 5.0, 9.8, 9.0)
+                9.0, 7.0, 6.0, 5.0, 9.0)
         db.insert_records(rest)
         
         print("")
@@ -226,6 +224,9 @@ if __name__ == '__main__':
         print("\nfetch_topx_by_food_rating:3", db.fetch_topx_by_food_rating(3))
         print("\nfetch_topx_by_overall_rating:3", db.fetch_topx_by_overall_rating(3))
         print("")
+        
+    except:
+        print("An exception occurred")
         
     finally:
         if(db):
