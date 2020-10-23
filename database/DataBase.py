@@ -46,7 +46,7 @@ class DataBase:
     
     def connect_to_db(self):
         try:
-            sqliteConn = sqlite3.connect('C:\\NUS_ISS_MTech\Year 2\Semester 2 - Practical Natural Language Processing\PLP CA\\database\gastrotommy.db')
+            sqliteConn = sqlite3.connect('C:\\NUS_ISS_MTech\Year 2\Semester 2 - Practical Natural Language Processing\PLP CA\\database\gastrotommy_lite.db')
             cursor = sqliteConn.cursor()
             print("Database created and Successfully Connected to SQLite")
         
