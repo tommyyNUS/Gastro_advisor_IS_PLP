@@ -47,13 +47,15 @@ For Mac: "source env/bin/activate"
 
 For Windows: "env\Scripts\activate"
 
-**Step 4**. In the command prompt/terminal CD to the project folder "<your-file-path>/Gastro_advisor_IS_PLP”. Enter "pip install -r requirements.txt" OR "pip3 install -r requirements.txt".  This will install all the required dependencies.
+**Step 4**. In the command prompt/terminal CD to the project folder "<your-file-path>/Gastro_advisor_IS_PLP”. Enter "pip install -r requirements.txt" OR "pip3 install -r requirements.txt".  This will install all the required dependencies. Once that is done, enter 'python -m spacy download en' to install the last dependency.
 
 **Step 5**. You need to open a channel to your computer so that telegram bot can communicate with your server. To do this, we will use ngrok. With a new command prompt/terminal CD to the project root folder "<your-file-path>/Gastro_advisor_IS_PLP". There will be an "ngrok_win" and an "ngrok_mac" file. Rename the file with your OS in use to just "ngrok". E.g If you are using MAC OS, delete the "_mac" from "ngrok_mac".
 From your command prompt, enter "ngrok http localhost:5000".
 Take note of the https link. It should look something like this "https://f34bb6f6.ngrok.io". Take note of this link.
 
 **Step 6**. Copy the https ngrok link and go to constants.py file in the project folder. Paste the link into the variable 'URL'. Include a forward slash at the end of the link, it should look like this 'https://f34bb6f6.ngrok.io/'
+
+**Step 7(Optional)** (If this step is not done you can only use the app with text and not audio) This step is to facilitate google speech to text api. If you have a service credentials file from google, you need to open your command prompt and set the system variable. Type in the command 'GOOGLE_APPLICATION_CREDENTIALS =(Path to your credentials JSON)'. For windows, type 'SET GOOGLE_APPLICATION_CREDENTIALS=(Path to your credentials JSON)'. This needs to be done each time you start up your environment. For more information go to https://cloud.google.com/speech-to-text/docs/quickstart-client-libraries
 
 **Step 7**. After step 4's installation has completed, from the command prompt CD to the project root folder "<your-file-path>/Gastro_advisor_IS_PLP” enter "python app.py". This will deploy your server locally on your pc. Do take note that your localhost should be deploying on port 5000 "http://127.0.0.1:5000/"
 
