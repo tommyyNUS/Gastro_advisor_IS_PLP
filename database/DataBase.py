@@ -27,6 +27,7 @@ class DataBase:
                                         w_fp_rating real,
                                         w_fsa_rating real,
                                         w_fsp_rating real,
+                                        w_fap_rating real,
                                         w_rest_rating real
                                     ); '''
     
@@ -44,9 +45,13 @@ class DataBase:
             self.SQLITE_CONN.close()
             print("The SQLite connection is closed")
     
-    def connect_to_db(self):
+    def connect_to_db(self, path=""):
         try:
-            sqliteConn = sqlite3.connect('C:\\NUS_ISS_MTech\Year 2\Semester 2 - Practical Natural Language Processing\PLP CA\\database\gastrotommy_lite.db')
+            
+            if path == "":
+                path = 'gastrotommy.db'
+                
+            sqliteConn = sqlite3.connect(path)
             cursor = sqliteConn.cursor()
             print("Database created and Successfully Connected to SQLite")
         
@@ -83,15 +88,22 @@ class DataBase:
         rest_food_rating,rest_srvc_rating,rest_ambi_rating,
         rest_prce_rating, rest_rating,
         w_fs_rating, w_fa_rating, w_fp_rating,
-        w_fsa_rating, w_fsp_rating,
+        w_fsa_rating, w_fsp_rating, w_fap_rating,
         w_rest_rating)
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?); '''
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?); '''
         
         cur = self.SQLITE_CONN.cursor()
         cur.execute(sql, record)
         self.SQLITE_CONN.commit()
     
         return cur.lastrowid
+
+    def fetch_restaurants_by_sql(self, sql):
+        cur = self.SQLITE_CONN.cursor()
+        cur.execute(sql)
+        rows = cur.fetchall()
+    
+        return rows
 
     def fetch_restaurant_by_name(self, rname):
         sql = " SELECT * FROM restaurant WHERE rest_name = ? ; "
@@ -186,14 +198,15 @@ class DataBase:
 
 ########################################
 ########################################
-"""
-if __name__ == '__main__':
 
+if __name__ == '__main__':
+    
+    db = None
     try:
         db = DataBase()
-        db.create_tables()
+        #db.create_tables()
                 
-        
+        """
         rest = (1, 'Ichiban Sushi', '123 Orchard Road', 'Central', 
                 'Japaneese,Traditional', 'Sushi#Sake#Saba Hot Plate',
                 9.5, 7.0, 6.0, 5.0, 9.0)
@@ -224,11 +237,17 @@ if __name__ == '__main__':
         print("\nfetch_topx_by_food_rating:3", db.fetch_topx_by_food_rating(3))
         print("\nfetch_topx_by_overall_rating:3", db.fetch_topx_by_overall_rating(3))
         print("")
+        """
+        
+        """
+        sql = "SELECT * FROM restaurant WHERE id=1"
+        print("\nfetch_rest_by_overall_custom_sql", db.fetch_restaurants_by_sql(sql))
+        """
         
     except:
         print("An exception occurred")
+        raise
         
     finally:
         if(db):
             db.destroy()
-"""
