@@ -1,17 +1,17 @@
 from datetime import datetime
-from chatbot.database_csv import get_restaurant
+from database.sqlscript import get_restaurant
 
 def check_intent(intent,obj,location,graded_aspect):
     if (intent == "GetTime"): 
         dt=datetime.now().strftime('%A %Y-%m-%d %H:%M:%S %p')
         response = f'Currently, it is {dt}'
+        return response,""
     elif (intent == "ExitApp"): 
         response = 'Bye! Have a nice day!'
+        return response,""
     elif (intent == "GetFood"): 
         response = f'Looking for {obj} restaurants with the best {graded_aspect} in the {location} of Singapore?' 
-        response = response + "\n\n" + get_restaurant(obj,location,20)   
-    
-    return response
+        return response,get_restaurant(obj,location,graded_aspect)
 
 def detect_intent(model,request):
     request = request.lower()
@@ -70,7 +70,7 @@ def get_location(obj):
 
 def get_graded_aspect(obj):
     graded_aspect = ["food"] #food is by default
-    wordlist_ambience = ["ambience","music","environment","peaceful","quiet"]
+    wordlist_ambience = ["ambience","music","environment","peaceful","quiet","cozy"]
     wordlist_service = ["service","kind staff","gentle staff","friendly","friendly staff","homely","welcoming","kind staffs","gentle staffs","friendly staffs"]
     wordlist_price = ["price","cheapest","cheap","inexpensive"]
     if (len(obj) != 0):
@@ -90,7 +90,7 @@ def get_graded_aspect(obj):
                 obj[:] = [y.replace(f'{x} ',"") for y in obj]
                 graded_aspect.append("price")  
         return obj,graded_aspect
-    else: return obj,[]
+    else: return obj,["food"]
 
 def reassign_triple(source,target,wordlist):
     for x in wordlist: 

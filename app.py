@@ -76,7 +76,9 @@ def respond():
     #Get response for restaurant recommendations
     intent_detected,intent,obj,location,graded_aspect = detect_intent(nlp,text)
 
-    if (intent_detected == 1): response = str(check_intent(intent,obj,location,graded_aspect))
+    if (intent_detected == 1): 
+        response,dataframe_output = check_intent(intent,obj,location,graded_aspect)
+        print(str(dataframe_output)) #this is the pandas dataframe output
     else: response = str(chatbot.get_response(text))
 	
     #Prepare message to send back to user
