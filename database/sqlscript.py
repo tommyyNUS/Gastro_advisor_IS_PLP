@@ -1,7 +1,7 @@
 import pandas as pd
 import sqlite3
 
-conn = sqlite3.connect("gastrotommy.db")
+#conn = sqlite3.connect("gastrotommy.db")
 #df = pd.read_sql_query("SELECT * FROM restaurant;", conn)
 
 #print(df)
@@ -9,6 +9,7 @@ conn = sqlite3.connect("gastrotommy.db")
 def get_restaurant(type,region,aspects):
     query = "SELECT * FROM restaurant"
     query = query + searchby_foodtype_region(type,region) + sort_by_aspect(aspects)
+    conn = sqlite3.connect("gastrotommy.db")
     df = pd.read_sql_query(query, conn)
     print("SQL Query: " + query)
     return df
