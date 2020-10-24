@@ -55,7 +55,9 @@ Take note of the https link. It should look something like this "https://f34bb6f
 
 **Step 6**. Copy the https ngrok link and go to constants.py file in the project folder. Paste the link into the variable 'URL'. Include a forward slash at the end of the link, it should look like this 'https://f34bb6f6.ngrok.io/'
 
-**Step 7(Optional)** (If this step is not done you can only use the app with text and not audio) This step is to facilitate google speech to text api. If you have a service credentials file from google, you need to open your command prompt and set the system variable. Type in the command 'GOOGLE_APPLICATION_CREDENTIALS =(Path to your credentials JSON)'. For windows, type 'SET GOOGLE_APPLICATION_CREDENTIALS=(Path to your credentials JSON)'. This needs to be done each time you start up your environment. For more information go to https://cloud.google.com/speech-to-text/docs/quickstart-client-libraries
+**Step 7(Speech to text - Optional)**. (If this step is not done you can only use the app with text and not audio) This step is to facilitate google speech to text api. If you have a service credentials file from google, you need to open your command prompt and set the system variable. Type in the command 'GOOGLE_APPLICATION_CREDENTIALS =(Path to your credentials JSON)'. For windows, type 'SET GOOGLE_APPLICATION_CREDENTIALS=(Path to your credentials JSON)'. This needs to be done each time you start up your environment. For more information go to https://cloud.google.com/speech-to-text/docs/quickstart-client-libraries
+
+**Step 7(Google Maps API Key - Mandatory)**. Obtain a google maps API key and place it in the constants.py file under the variable 'GOOGLE_MAPS_API_KEY'.
 
 **Step 7**. After step 4's installation has completed, from the command prompt CD to the project root folder "<your-file-path>/Gastro_advisor_IS_PLP” enter "python app.py". This will deploy your server locally on your pc. Do take note that your localhost should be deploying on port 5000 "http://127.0.0.1:5000/"
 
