@@ -7,6 +7,7 @@ Created on Sat Oct 17 20:25:52 2020
 
 import sqlite3
 from sqlite3 import Error
+import pandas as pd
 
 class DataBase:
     # tasks table
@@ -99,10 +100,10 @@ class DataBase:
         return cur.lastrowid
 
     def fetch_restaurants_by_sql(self, sql):
-        cur = self.SQLITE_CONN.cursor()
-        cur.execute(sql)
-        rows = cur.fetchall()
-    
+        cur = self.SQLITE_CONN
+        #cur.execute(sql)
+        #rows = cur.fetchall()
+        rows = pd.read_sql_query(sql,cur)
         return rows
 
     def fetch_restaurant_by_name(self, rname):

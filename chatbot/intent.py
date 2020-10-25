@@ -1,5 +1,5 @@
 from datetime import datetime
-from database.sqlscript import get_restaurant
+from database.restaurant_query import get_restaurant
 
 def check_intent(intent,obj,location,graded_aspect):
     if (intent == "GetTime"): 
@@ -50,7 +50,7 @@ def detect_intent(model,request):
     return intent_detected,intent,obj,location,graded_aspect
 
 def remove_stopwords(textarray):
-    for stopwords in ["a ","the ","good ","best ","delicious ","some ","marvellous ","decent ","nice "," side","very "," food"," restaurant"," restaurants"," cuisine","any ",","," any ","what "]: 
+    for stopwords in ["a ","the ","good ","best ","delicious ","some ","marvellous ","fantastic ","decent ","nice "," side","very "," food"," restaurant"," restaurants"," cuisine","any ",","," any ","what "]: 
         textarray[:] = [x.replace(stopwords,"") for x in textarray]
     textarray[:] = [x.replace("town","central") for x in textarray]
 
@@ -78,10 +78,16 @@ def get_graded_aspect(obj):
             if x in obj:
                 obj.remove(x)
                 graded_aspect.append("ambience")
+            elif any((obj[y[0]].find(f'{x} ') != -1) for y in enumerate(obj)):
+                obj[:] = [y.replace(f'{x} ',"") for y in obj]
+                graded_aspect.append("ambience")    
         for x in wordlist_service:
             if x in obj:
                 obj.remove(x)
-                graded_aspect.append("service")    
+                graded_aspect.append("service")
+            elif any((obj[y[0]].find(f'{x} ') != -1) for y in enumerate(obj)):
+                obj[:] = [y.replace(f'{x} ',"") for y in obj]
+                graded_aspect.append("service")      
         for x in wordlist_price:
             if x in obj:
                 obj.remove(x)

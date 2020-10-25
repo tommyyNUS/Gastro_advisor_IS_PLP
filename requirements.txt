@@ -11,3 +11,4 @@ pandas==0.24.2
 https://github.com/explosion/spacy-models/releases/download/en_core_web_md-2.1.0/en_core_web_md-2.1.0.tar.gz#egg=en_core_web_md==2.1.0
 google-cloud-speech==2.0.0
 gmaps==0.9.0
+googlemaps==4.4.2
