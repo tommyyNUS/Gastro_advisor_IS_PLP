@@ -31,13 +31,19 @@ class DataBase:
                                         w_fap_rating real,
                                         w_rest_rating real
                                     ); '''
-    
+    PATH = None
     SQLITE_CONN = None
     
-    def __init__(self):
+    def __init__(self, path=None):
         try:
+            if path is None:
+                self.PATH = 'gastrotommy_v2.db'
+            else:
+                self.PATH = path
+                
             if self.SQLITE_CONN is None:
                 self.SQLITE_CONN = self.connect_to_db()
+                
         except Error as e:
             print("ERROR while creating connection", e)
     
@@ -46,26 +52,25 @@ class DataBase:
             self.SQLITE_CONN.close()
             print("The SQLite connection is closed")
     
-    def connect_to_db(self, path=""):
-        try:
-            
-            if path == "":
-                path = 'gastrotommy.db'
+    def connect_to_db(self):
+        if self.SQLITE_CONN is None:
+            try:                
+                sqliteConn = sqlite3.connect(self.PATH)
+                self.SQLITE_CONN = sqliteConn
+                print("Database created and Successfully Connected to SQLite:", self.PATH)
                 
-            sqliteConn = sqlite3.connect(path)
-            cursor = sqliteConn.cursor()
-            print("Database created and Successfully Connected to SQLite")
-        
-            sqlite_select_Query = "select sqlite_version();"
-            cursor.execute(sqlite_select_Query)
-            record = cursor.fetchall()
-            print("SQLite Database Version is: ", record)
-            cursor.close()
-        
-        except Error as e:
-            print("Error while connecting to sqlite", e)
+                sqlite_select_Query = "select sqlite_version();"
+                cursor = sqliteConn.cursor()
+                cursor.execute(sqlite_select_Query)
+                record = cursor.fetchall()
+                print("SQLite Database Version is: ", record)
+                cursor.close()
+            
+            except Error as e:
+                print("Error while connecting to sqlite", e)
+                raise e
     
-        return sqliteConn        
+        return self.SQLITE_CONN
     
     def create_tables(self):
         try:
@@ -199,7 +204,7 @@ class DataBase:
 
 ########################################
 ########################################
-
+"""
 if __name__ == '__main__':
     
     db = None
@@ -207,7 +212,7 @@ if __name__ == '__main__':
         db = DataBase()
         #db.create_tables()
                 
-        """
+        
         rest = (1, 'Ichiban Sushi', '123 Orchard Road', 'Central', 
                 'Japaneese,Traditional', 'Sushi#Sake#Saba Hot Plate',
                 9.5, 7.0, 6.0, 5.0, 9.0)
@@ -238,12 +243,9 @@ if __name__ == '__main__':
         print("\nfetch_topx_by_food_rating:3", db.fetch_topx_by_food_rating(3))
         print("\nfetch_topx_by_overall_rating:3", db.fetch_topx_by_overall_rating(3))
         print("")
-        """
         
-        """
         sql = "SELECT * FROM restaurant WHERE id=1"
         print("\nfetch_rest_by_overall_custom_sql", db.fetch_restaurants_by_sql(sql))
-        """
         
     except:
         print("An exception occurred")
@@ -252,3 +254,4 @@ if __name__ == '__main__':
     finally:
         if(db):
             db.destroy()
+"""
