@@ -9,7 +9,6 @@ from database.DataBase import DataBase
 
 if __name__ == "__main__":
     
-    """
     # Prompt user before re-scoring DB
     _in1 = input("Do you really want to re-score the current DB? Enter yes/no: ")
     if _in1.lower() == 'yes':
@@ -17,7 +16,7 @@ if __name__ == "__main__":
     else:
         print("Bye!")
         sys.exit()
-    """
+
     db = None
     try:
         
