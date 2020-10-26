@@ -37,7 +37,7 @@ class DataBase:
     def __init__(self, path=None):
         try:
             if path is None:
-                self.PATH = 'gastrotommy_v2.db'
+                self.PATH = 'gastrotommy_v3.db'
             else:
                 self.PATH = path
                 
