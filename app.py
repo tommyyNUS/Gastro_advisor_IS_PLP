@@ -111,6 +111,10 @@ def respond():
             print("Full address: "+full_address)
             
             place_json = getVenueDetails(full_address, row['rest_name'])
+            
+            if len(place_json) <=0:
+                sendTelegramMessage(chat_id, "Unable to find any restaurants, please search for something else.")
+            
             print("--- Google JSON details ---")
             print(place_json)
             print()
@@ -206,31 +210,32 @@ def getVenueDetails(address, rest_name):
     gmapsPlaces = []
     place_id = ""
     
-    for item in places:
-        print("appending "+str(item['place_id']))
-        place_ids.append(item['place_id'])
+    if len(places) > 0:
+        for item in places:
+            print("appending "+str(item['place_id']))
+            place_ids.append(item['place_id'])
     
-    if len(places) > 5:
-        for idx, placeID in enumerate(place_ids):
-            place = gmaps.place(placeID)
-            gmapsPlaces.append(place)
-            if idx == 5:
-                break
-    else:
-        for placeID in place_ids:
-            place = gmaps.place(placeID)
-            print("Appending place: "+str(place['result']['name']))
-            gmapsPlaces.append(place)
-    print("Length of google places: "+str(len(gmapsPlaces)))    
-    for gmapPlace in gmapsPlaces:
-        print("Comparing "+rest_name+", with "+gmapPlace['result']['name'])
-        if rest_name.lower() in gmapPlace['result']['name'].lower():
-            print("Place found for "+rest_name)
-            return gmapPlace
+        if len(places) > 5:
+            for idx, placeID in enumerate(place_ids):
+                place = gmaps.place(placeID)
+                gmapsPlaces.append(place)
+                if idx == 5:
+                    break
+        else:
+            for placeID in place_ids:
+                place = gmaps.place(placeID)
+                print("Appending place: "+str(place['result']['name']))
+                gmapsPlaces.append(place)
+                print("Length of google places: "+str(len(gmapsPlaces)))    
+        for gmapPlace in gmapsPlaces:
+            print("Comparing "+rest_name+", with "+gmapPlace['result']['name'])
+            if rest_name.lower() in gmapPlace['result']['name'].lower():
+                print("Place found for "+rest_name)
+                return gmapPlace
             
-    if placeFound is False:
-        print("Place not found for "+rest_name)
-        return gmapsPlaces[0]
+        if placeFound is False:
+            print("Place not found for "+rest_name)
+            return gmapsPlaces[0]
 
 def getVenuePhotos(photo_refs):
     gmaps = googlemaps.Client(key=GOOGLE_MAPS_API_KEY)
