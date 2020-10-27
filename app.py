@@ -106,93 +106,94 @@ def respond():
 
         #print(dataframe_output.columns)
         #Loop through each entry in dataframe
+        i=1
         for idx, row in dataframe_output.iterrows():
             full_address = row['rest_name'] + ", "+row['rest_address']
             print("Full address: "+full_address)
             
             place_json = getVenueDetails(full_address, row['rest_name'])
             
-            if len(place_json) <=0:
-                sendTelegramMessage(chat_id, "Unable to find any restaurants, please search for something else.")
+    
+            if place_json is not None:
+                print("--- Google JSON details ---")
+                print(place_json)
+                print()
             
-            print("--- Google JSON details ---")
-            print(place_json)
-            print()
-            
-            #Get various JSON details
-            website = ""
-            phoneNo = ""
-            googReviewScore = ""
-            openingHours_array = []
-            address = ""
-            photo_refs=[]
-            openingHours = ""
-            resName = place_json['result']['name']
-            if 'international_phone_number' in place_json['result']: 
-                phoneNo = place_json['result']['international_phone_number']
-            
-            if 'website' in place_json['result']:
-                website = place_json['result']['website']
-            if website == "":
-                if 'url' in place_json['result']:
-                    website = place_json['result']['url']
-            
-            if 'rating' in place_json['result']:
-                googReviewScore = place_json['result']['rating']
-                
-            lat = place_json['result']['geometry']['location']['lat']
-            long = place_json['result']['geometry']['location']['lng']
-            
-            if 'opening_hours' in place_json['result']: 
-                openingHours_array = place_json['result']['opening_hours']['weekday_text']
+                #Get various JSON details
+                website = ""
+                phoneNo = ""
+                googReviewScore = ""
+                openingHours_array = []
+                address = ""
+                photo_refs=[]
                 openingHours = ""
-                if len(openingHours_array) > 0:
-                    for item in openingHours_array:
-                        openingHours = openingHours + item+"\n"
+                resName = place_json['result']['name']
+                if 'international_phone_number' in place_json['result']: 
+                    phoneNo = place_json['result']['international_phone_number']
+            
+                if 'website' in place_json['result']:
+                    website = place_json['result']['website']
+                if website == "":
+                    if 'url' in place_json['result']:
+                        website = place_json['result']['url']
+            
+                if 'rating' in place_json['result']:
+                    googReviewScore = place_json['result']['rating']
+                
+                lat = place_json['result']['geometry']['location']['lat']
+                long = place_json['result']['geometry']['location']['lng']
+            
+                if 'opening_hours' in place_json['result']: 
+                    openingHours_array = place_json['result']['opening_hours']['weekday_text']
+                    openingHours = ""
+                    if len(openingHours_array) > 0:
+                        for item in openingHours_array:
+                            openingHours = openingHours + item+"\n"
                         
-            if 'formatted_address' in place_json['result']:
-                address = place_json['result']['formatted_address']
-            if 'photos' in place_json['result']:
-                photo_refs = place_json['result']['photos']
+                if 'formatted_address' in place_json['result']:
+                    address = place_json['result']['formatted_address']
+                if 'photos' in place_json['result']:
+                    photo_refs = place_json['result']['photos']
             
-            print("Restaurant name: "+resName)        
-            print("Phone Number: "+phoneNo)
-            print("Website: "+website)
-            print("Long: "+str(long)+", Lat: "+str(lat))        
-            print("Opening hours\n")
-            print(openingHours)
-            print("Address: "+address)
+                print("Restaurant name: "+resName)        
+                print("Phone Number: "+phoneNo)
+                print("Website: "+website)
+                print("Long: "+str(long)+", Lat: "+str(lat))        
+                print("Opening hours\n")
+                print(openingHours)
+                print("Address: "+address)
             
-            #Adding our ratings
-            rest_overall_rating = str(round(float(row['w_rest_rating'])*5, 1))
-            foodRating = str(round(float(row['rest_food_rating'])*5, 1))
-            serviceRating = str(round(float(row['rest_srvc_rating'])*5, 1))
-            priceRating = str(round(float(row['rest_prce_rating'])*5, 1))
-            ambienceRating = str(round(float(row['rest_ambi_rating'])*5, 1))
+                #Adding our ratings
+                rest_overall_rating = str(round(float(row['w_rest_rating'])*5, 1))
+                foodRating = str(round(float(row['rest_food_rating'])*5, 1))
+                serviceRating = str(round(float(row['rest_srvc_rating'])*5, 1))
+                priceRating = str(round(float(row['rest_prce_rating'])*5, 1))
+                ambienceRating = str(round(float(row['rest_ambi_rating'])*5, 1))
              
-            #Prepare message to send back to user
-            #1. Text message
-            bot_message = str(idx+1)+". "+str(resName)+"\n"
-            if phoneNo != "":
-                bot_message = bot_message + "Phone: "+str(phoneNo)+"\n"
-            if website != "":
-                bot_message = bot_message + "Website: "+str(website)+"\n"
+                #Prepare message to send back to user
+                #1. Text message
+                bot_message = str(i)+". "+str(resName)+"\n"
+                if phoneNo != "":
+                    bot_message = bot_message + "Phone: "+str(phoneNo)+"\n"
+                if website != "":
+                    bot_message = bot_message + "Website: "+str(website)+"\n"
         
-            bot_message = bot_message + "Google Review Score: "+str(googReviewScore)+"\n"
-            bot_message = bot_message + "Gastrotomi Score: "+str(rest_overall_rating)+"\n"            
-            bot_message = bot_message + "\n--- Gastrotomi Ratings ---\n"+"Food: "+str(foodRating)+"\n"+"Price: "+str(priceRating)+"\n"+"Service: "+str(serviceRating)+"\n"+"Ambience: "+str(ambienceRating)+"\n"
+                bot_message = bot_message + "Google Review Score: "+str(googReviewScore)+"\n"
+                bot_message = bot_message + "Gastrotomi Score: "+str(rest_overall_rating)+"\n"            
+                bot_message = bot_message + "\n--- Gastrotomi Ratings ---\n"+"Food: "+str(foodRating)+"\n"+"Price: "+str(priceRating)+"\n"+"Service: "+str(serviceRating)+"\n"+"Ambience: "+str(ambienceRating)+"\n"
             
-            if openingHours != "":
-                bot_message = bot_message + "\nOpening Hours: \n"+str(openingHours)
+                if openingHours != "":
+                    bot_message = bot_message + "\nOpening Hours: \n"+str(openingHours)
             
-            sendTelegramMessage(chat_id, bot_message)
+                sendTelegramMessage(chat_id, bot_message)
             
-            #2. Location
-            sendTelegramVenue(chat_id, lat, long, resName, address)
+                #2. Location
+                sendTelegramVenue(chat_id, lat, long, resName, address)
             
-            #3. Photos
-            photos = getVenuePhotos(photo_refs)
-            sendTelegramMediaGroup(chat_id, photos)
+                #3. Photos
+                photos = getVenuePhotos(photo_refs)
+                sendTelegramMediaGroup(chat_id, photos)
+                i+=1
         
         return 'ok'
 
