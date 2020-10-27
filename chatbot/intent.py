@@ -71,7 +71,7 @@ def get_location(obj):
 def get_graded_aspect(obj):
     graded_aspect = ["food"] #food is by default
     wordlist_ambience = ["ambience","music","environment","peaceful","quiet","cozy"]
-    wordlist_service = ["service","kind staff","gentle staff","friendly","friendly staff","homely","welcoming","kind staffs","gentle staffs","friendly staffs"]
+    wordlist_service = ["kind staff","kind staffs","gentle staffs","friendly staffs","gentle staff","friendly staff","homely","welcoming","friendly","service"]
     wordlist_price = ["price","cheapest","cheap","inexpensive"]
     if (len(obj) != 0):
         for x in wordlist_ambience:
