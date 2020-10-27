@@ -69,7 +69,7 @@ def respond():
     update = telegram.Update.de_json(request.get_json(force=True), bot)
     chat_id = update.message.chat.id
     msg_id = update.message.message_id
-    signature_id = update.message.chat.username+update.message.chat.first_name+update.message.chat.last_name
+    signature_id = str(update.message.chat.username)+str(update.message.chat.first_name)+str(update.message.chat.last_name)
     print(update.message)
     
     if update.message.text != None:
