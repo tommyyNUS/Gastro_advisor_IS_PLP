@@ -26,6 +26,7 @@ import en_core_web_md
 
 print("Initializing...")
 chatbot = initialize()
+history = ""
 
 #Check for Mode
 global MODE
@@ -63,16 +64,27 @@ app = Flask(__name__)
 
 @app.route('/{}'.format(TOKEN), methods=['POST'])
 def respond():
+    global history
     text = ""
     update = telegram.Update.de_json(request.get_json(force=True), bot)
     chat_id = update.message.chat.id
     msg_id = update.message.message_id
+    signature_id = update.message.chat.username+update.message.chat.first_name+update.message.chat.last_name
     print(update.message)
     
     if update.message.text != None:
         text = update.message.text.encode('utf-8').decode()
+        if (history == str(signature_id+text)):  #Accounts for one timeout in heroku
+            history = ""
+            return 'ok'
+        else: history = str(signature_id+text)
     if update.message.voice != None:
         if update.message.voice.file_id != None:
+            if (history == str(signature_id+update.message.voice.file_id)): #Accounts for one timeout in heroku
+                history = ""
+                return 'ok'
+            else: history = str(signature_id+update.message.voice.file_id)
+
             audio_file_object = bot.get_file(update.message.voice.file_id)
             audio_file_object.download('file.ogg')
             mypath = path.join(getcwd(), 'file.ogg')  
