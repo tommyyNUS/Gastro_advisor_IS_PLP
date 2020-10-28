@@ -216,7 +216,7 @@ def respond():
 
                     bot_message = bot_message + "Google Review Score: "+str(googReviewScore)+"\n"
                     bot_message = bot_message + "Gastrotomi Score: "+str(rest_overall_rating)+"\n"
-                    bot_message = bot_message + "\n--- Gastrotomi Ratings ---\n"+"Food: "+str(foodRating)+"\n"+"Price: "+str(priceRating)+"\n"+"Service: "+str(serviceRating)+"\n"+"Ambience: "+str(ambienceRating)+"\n"
+                    bot_message = bot_message + "\n--- Gastrotomi Ratings ---\n"+"Food: "+str(foodRating)+"\n"+"Service: "+str(serviceRating)+"\n"+"Ambience: "+str(ambienceRating)+"\n"+"Price: "+str(priceRating)+"\n"
 
                     if openingHours != "":
                         bot_message = bot_message + "\nOpening Hours: \n"+str(openingHours)
