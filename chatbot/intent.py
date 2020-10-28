@@ -1,16 +1,18 @@
 from datetime import datetime
+import pytz
 from database.restaurant_query import get_restaurant
 
 def check_intent(intent,obj,location,graded_aspect):
     if (intent == "GetTime"): 
-        dt=datetime.now().strftime('%A %Y-%m-%d %H:%M:%S %p')
+        dt=datetime.now(pytz.timezone('Asia/Singapore')).strftime('%A %Y-%m-%d %H:%M:%S')
         response = f'Currently, it is {dt}'
         return response,""
     elif (intent == "ExitApp"): 
         response = 'Bye! Have a nice day!'
         return response,""
     elif (intent == "GetFood"): 
-        response = f'Looking for {obj} restaurants with the best {graded_aspect} in the {location} of Singapore?' 
+        #response = f'Looking for {obj} restaurants with the best {graded_aspect} in the {location} of Singapore?' 
+        response = "Please wait while we look for the best restaurants for you..."
         return response,get_restaurant(obj,location,graded_aspect)
 
 def detect_intent(model,request):
@@ -31,11 +33,12 @@ def detect_intent(model,request):
     else: predicate_grammar = False
 
     get_time_condition = detect_keyword(["time","day","date"],obj)
-    get_food_condition = detect_keyword(["eat","recommend","find","get","crave","want","wan","hungry","suggest","have","serve","look","recommendation","recommendations"],pred)
+    get_food_condition = detect_keyword(["eat","recommend","find","get","crave","want","wan","hungry","suggest","have","serve","look","recommendation","recommendations","try"],pred)
+    get_food_not_condition = detect_keyword(["all","any","every","what"],obj)
     if get_time_condition: 
         intent = "GetTime"
         intent_detected = 1
-    elif get_food_condition and predicate_grammar:
+    elif get_food_condition and predicate_grammar and (get_food_not_condition == False):
         intent = "GetFood"
         intent_detected = 1
     else:
