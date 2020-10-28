@@ -9,7 +9,7 @@ from database.DataBase import DataBase
 
 def get_restaurant(type,region,aspects):
     db=DataBase()
-    query = "SELECT rest_name, rest_address, rest_region, AVG(rest_food_rating) as rest_food_rating, AVG(rest_srvc_rating) as rest_srvc_rating, AVG(rest_ambi_rating) as rest_ambi_rating, AVG(rest_prce_rating) as rest_prce_rating, w_rest_rating FROM restaurant"
+    query = "SELECT rest_name, rest_address, rest_region, AVG(rest_food_rating) as rest_food_rating, AVG(rest_srvc_rating) as rest_srvc_rating, AVG(rest_ambi_rating) as rest_ambi_rating, AVG(rest_prce_rating) as rest_prce_rating, AVG(w_rest_rating) as w_rest_rating FROM restaurant"
     query = query + searchby_foodtype_region(type,region) + sort_by_aspect(aspects)
     df=db.fetch_restaurants_by_sql(query)
     print("SQL Query: " + query)
@@ -37,7 +37,7 @@ def searchby_foodtype_region(type,region):
                 foodquery = basefoodquery.replace("**food**",x)
                 init = False
             else:
-                foodquery = foodquery + " OR " + basefoodquery.replace("**food**",x)
+                foodquery = foodquery + " AND " + basefoodquery.replace("**food**",x)
     else:
         foodquery = ""
         
@@ -58,7 +58,7 @@ def searchby_foodtype_region(type,region):
 def sort_by_aspect(aspects):
     if len(aspects) == 1:
         #sortby_food = detect_aspect(aspects,["food"])
-        query = " GROUP BY rest_name ORDER BY AVG(rest_food_rating) DESC LIMIT 5;"
+        query = " GROUP BY rest_name ORDER BY AVG(w_rest_rating) DESC LIMIT 5;"
      
         
     elif len(aspects) == 2:
