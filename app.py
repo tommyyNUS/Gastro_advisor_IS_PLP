@@ -7,6 +7,7 @@ import googlemaps
 from datetime import datetime
 from google.cloud import speech
 from os import path, getcwd, environ
+import random
 
 #Global variables
 global bot
@@ -27,7 +28,20 @@ import en_core_web_md
 print("Initializing...")
 chatbot = initialize()
 history = ""
-
+greetings = {
+    '1':'Hi there, feeling hungry? What do you want to try today?',
+    '2':'Hello, My name is Gastrotomi! What would you like to eat today?',
+    '3':'I am Gastrotomi! I can give great recommendations based on your cravings of the day!',
+    '4':'Greetings! My name is Gastrotomi. What would you like me to recommend today?',
+    '5':'A lovely day to you! Hungering for anything special?'
+    }
+suggested_prompt = {
+    '1':'\n\n(To begin, try an example: "Can you recommend me a place to eat prata?")',
+    '2':'\n\n(To begin, try an example: "Where can i find good fish head curry in the north?")',
+    '3':'\n\n(To begin, try an example: "Recommend me a bar to have tapas")',
+    '4':'\n\n(To begin, try an example: "Find me a place in town for western cuisine")',
+    '5':'\n\n(To begin, try an example: "I want a place for steak with good ambience and staff service")'    
+    }
 #Check for Mode
 global MODE
 if (len(sys.argv) == 2): 
@@ -77,6 +91,11 @@ def respond():
         if (history == str(signature_id+text)):  #Accounts for one timeout in heroku
             history = ""
             return 'ok'
+        if update.message.text == '/start':
+            greeting_message = str(random.choice(list(greetings.values())))+str(random.choice(list(suggested_prompt.values())))
+            sendTelegramMessage(chat_id, greeting_message)
+            return 'ok'
+        
         else: history = str(signature_id+text)
     if update.message.voice != None:
         if update.message.voice.file_id != None:
@@ -151,7 +170,8 @@ def respond():
             
                 if 'rating' in place_json['result']:
                     googReviewScore = place_json['result']['rating']
-                
+                if googReviewScore == "":
+                    googReviewScore = "N.A."
                 lat = place_json['result']['geometry']['location']['lat']
                 long = place_json['result']['geometry']['location']['lng']
             
@@ -192,7 +212,7 @@ def respond():
         
                 bot_message = bot_message + "Google Review Score: "+str(googReviewScore)+"\n"
                 bot_message = bot_message + "Gastrotomi Score: "+str(rest_overall_rating)+"\n"            
-                bot_message = bot_message + "\n--- Gastrotomi Ratings ---\n"+"Food: "+str(foodRating)+"\n"+"Price: "+str(priceRating)+"\n"+"Service: "+str(serviceRating)+"\n"+"Ambience: "+str(ambienceRating)+"\n"
+                bot_message = bot_message + "\n--- Gastrotomi Ratings ---\n"+"Food: "+str(foodRating)+"\n"+"Service: "+str(serviceRating)+"\n"+"Ambience: "+str(ambienceRating)+"\n"+"Price: "+str(priceRating)+"\n"
             
                 if openingHours != "":
                     bot_message = bot_message + "\nOpening Hours: \n"+str(openingHours)
