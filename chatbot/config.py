@@ -9,7 +9,7 @@ def initialize():
                     {
                         'import_path': 'chatterbot.logic.BestMatch',
                         'threshold': 0.9,
-                        'default_response': "I'm sorry I do not quite understand that."
+                        'default_response': "I'm sorry I do not quite understand that.\nMay be you can try something like 'I want to eat Sushi'"
                     }
                 ],
                 response_selection_method=get_random_response,
