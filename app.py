@@ -174,7 +174,8 @@ def respond():
 
                     if 'rating' in place_json['result']:
                         googReviewScore = place_json['result']['rating']
-
+                    if googReviewScore == "":
+                        googReviewScore = "N.A."
                     lat = place_json['result']['geometry']['location']['lat']
                     long = place_json['result']['geometry']['location']['lng']
 
