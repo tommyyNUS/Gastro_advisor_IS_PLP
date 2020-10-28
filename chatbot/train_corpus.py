@@ -16,7 +16,7 @@ def train_data(chatbot):
     trainer = ListTrainer(chatbot)
 
     #library addons
-    thank_addons = ["Thank You","You're Welcome","Thanks","You're Welcome"]
+    thank_addons = ["Thank You","You're Welcome","Thanks","You're Welcome","Great","Happy to hear, anything else you are looking for?","That's all","Happy to help you, see you again","That's all I want","Happy to help you, see you again"]
     hello_addons = ["Hello there","Hello, how are you?","I'm fine","That's good to hear!","I am fine","That's good to hear!","I'm doing well","That's good to hear!","I am doing well","That's good to hear!"]
     joke_addons = ["ha ha", "hahaha","haha", "hahaha", "hahaha", "lol","rofl", "lmao", "lmao","hahaha"]
     task_addons = ["what is your function","i recommend the best food to people!","what do you do","i recommend the best food to people!"]
