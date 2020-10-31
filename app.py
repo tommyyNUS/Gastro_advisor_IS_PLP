@@ -16,11 +16,14 @@ TOKEN = bot_token
 bot = telegram.Bot(token=TOKEN)
 environ["GOOGLE_APPLICATION_CREDENTIALS"] = "secrets.json"
 client = speech.SpeechClient()
+query_ = ""
+num = 5
 
 #Initialize Chatbot
 from chatbot.intent import check_intent,detect_intent
 from chatbot.config import initialize
 from chatbot.train_corpus import train_data
+from database.restaurant_query import get_more_restaurants
 
 import spacy
 import en_core_web_md
@@ -51,6 +54,8 @@ else: MODE = "TELEGRAM"
 
 #Set Mode
 if (MODE == "DEBUG"):
+    query = ""
+    num = 5
     nlp = spacy.load("en_core_web_md", disable=["ner"])
     print("Hello, you are in debug mode, how can i help you?")
     while 1:
@@ -58,8 +63,12 @@ if (MODE == "DEBUG"):
 
         intent_detected,intent,obj,location,graded_aspect = detect_intent(nlp,request)
         if (intent_detected == 1):
-            response,dataframe_output = check_intent(intent,obj,location,graded_aspect)
+            response,dataframe_output,query = check_intent(intent,obj,location,graded_aspect)
             print(str(dataframe_output)) #this is the pandas dataframe output
+            num=5
+        elif ( (request.find("more") != -1 or request.find("other") != -1  or request.find("else") != -1) and query != ""):  
+            print(str(get_more_restaurants(query,num)))
+            num=num+5
         else: response = str(chatbot.get_response(request))
 
         print("Bot: ", response)
@@ -81,6 +90,8 @@ def respond():
     try:
         #return 'ok' #flush cache
         global history
+        global query_
+        global num
         text = ""
         update = telegram.Update.de_json(request.get_json(force=True), bot)
         chat_id = update.message.chat.id
@@ -135,7 +146,8 @@ def respond():
         intent_detected,intent,obj,location,graded_aspect = detect_intent(nlp,text)
 
         if (intent_detected == 1):
-            response,dataframe_output = check_intent(intent,obj,location,graded_aspect)
+            num=5
+            response,dataframe_output,query_ = check_intent(intent,obj,location,graded_aspect)
             print(str(dataframe_output)) #this is the pandas dataframe output
             bot.sendMessage(chat_id=chat_id, text=response, reply_to_message_id=msg_id)
             if (intent == "GetFood" and len(dataframe_output) == 0): sendTelegramMessage(chat_id, "Unable to find any restaurants, please search for something else.")
@@ -233,6 +245,106 @@ def respond():
 
             return 'ok'
 
+        elif ( (text.find("more") != -1 or text.find("other") != -1  or text.find("else") != -1) and query_ != ""): 
+            print(query_)
+            dataframe_output= get_more_restaurants(query_,num)
+            print(str(dataframe_output))
+            num=num+5
+            bot.sendMessage(chat_id=chat_id, text="Please wait while we look for the best restaurants for you...", reply_to_message_id=msg_id)
+            if (len(dataframe_output) == 0): sendTelegramMessage(chat_id, "Unable to find any restaurants, please search for something else.")
+            #print(dataframe_output.columns)
+            #Loop through each entry in dataframe
+            i=1
+            for idx, row in dataframe_output.iterrows():
+                full_address = row['rest_name'] + ", "+row['rest_address']
+                print("Full address: "+full_address)
+
+                place_json = getVenueDetails(full_address, row['rest_name'])
+
+
+                if place_json is not None:
+                    print("--- Google JSON details ---")
+                    print(place_json)
+                    print()
+
+                    #Get various JSON details
+                    website = ""
+                    phoneNo = ""
+                    googReviewScore = ""
+                    openingHours_array = []
+                    address = ""
+                    photo_refs=[]
+                    openingHours = ""
+                    resName = place_json['result']['name']
+                    if 'international_phone_number' in place_json['result']:
+                        phoneNo = place_json['result']['international_phone_number']
+
+                    if 'website' in place_json['result']:
+                        website = place_json['result']['website']
+                    if website == "":
+                        if 'url' in place_json['result']:
+                            website = place_json['result']['url']
+
+                    if 'rating' in place_json['result']:
+                        googReviewScore = place_json['result']['rating']
+                    if googReviewScore == "":
+                        googReviewScore = "N.A."
+                    lat = place_json['result']['geometry']['location']['lat']
+                    long = place_json['result']['geometry']['location']['lng']
+
+                    if 'opening_hours' in place_json['result']:
+                        openingHours_array = place_json['result']['opening_hours']['weekday_text']
+                        openingHours = ""
+                        if len(openingHours_array) > 0:
+                            for item in openingHours_array:
+                                openingHours = openingHours + item+"\n"
+
+                    if 'formatted_address' in place_json['result']:
+                        address = place_json['result']['formatted_address']
+                    if 'photos' in place_json['result']:
+                        photo_refs = place_json['result']['photos']
+
+                    print("Restaurant name: "+resName)
+                    print("Phone Number: "+phoneNo)
+                    print("Website: "+website)
+                    print("Long: "+str(long)+", Lat: "+str(lat))
+                    print("Opening hours\n")
+                    print(openingHours)
+                    print("Address: "+address)
+
+                    #Adding our ratings
+                    rest_overall_rating = str(round(float(row['w_rest_rating'])*5, 1))
+                    foodRating = str(round(float(row['rest_food_rating'])*5, 1))
+                    serviceRating = str(round(float(row['rest_srvc_rating'])*5, 1))
+                    priceRating = str(round(float(row['rest_prce_rating'])*5, 1))
+                    ambienceRating = str(round(float(row['rest_ambi_rating'])*5, 1))
+
+                    #Prepare message to send back to user
+                    #1. Text message
+                    bot_message = str(i)+". "+str(resName)+"\n"
+                    if phoneNo != "":
+                        bot_message = bot_message + "Phone: "+str(phoneNo)+"\n"
+                    if website != "":
+                        bot_message = bot_message + "Website: "+str(website)+"\n"
+
+                    bot_message = bot_message + "Google Review Score: "+str(googReviewScore)+"\n"
+                    bot_message = bot_message + "Gastrotomi Score: "+str(rest_overall_rating)+"\n"
+                    bot_message = bot_message + "\n--- Gastrotomi Ratings ---\n"+"Food: "+str(foodRating)+"\n"+"Service: "+str(serviceRating)+"\n"+"Ambience: "+str(ambienceRating)+"\n"+"Price: "+str(priceRating)+"\n"
+
+                    if openingHours != "":
+                        bot_message = bot_message + "\nOpening Hours: \n"+str(openingHours)
+
+                    sendTelegramMessage(chat_id, bot_message)
+
+                    #2. Location
+                    sendTelegramVenue(chat_id, lat, long, resName, address)
+
+                    #3. Photos
+                    photos = getVenuePhotos(photo_refs)
+                    sendTelegramMediaGroup(chat_id, photos)
+                    i+=1
+
+            return 'ok'
         else:
             response = str(chatbot.get_response(text))
             bot.sendMessage(chat_id=chat_id, text=response, reply_to_message_id=msg_id)

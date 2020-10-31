@@ -7,13 +7,23 @@ from database.DataBase import DataBase
 
 #print(df)
 
+
+def get_more_restaurants(query,num):
+    db=DataBase()
+
+    morequery = query.replace('DESC LIMIT 5',f'DESC LIMIT 5 OFFSET {num}')
+    df=db.fetch_restaurants_by_sql(morequery)
+    print("SQL Query: " + morequery)
+    return df   
+
 def get_restaurant(type,region,aspects):
     db=DataBase()
     query = "SELECT rest_name, rest_address, rest_region, AVG(rest_food_rating) as rest_food_rating, AVG(rest_srvc_rating) as rest_srvc_rating, AVG(rest_ambi_rating) as rest_ambi_rating, AVG(rest_prce_rating) as rest_prce_rating, AVG(w_rest_rating) as w_rest_rating FROM restaurant"
     query = query + searchby_foodtype_region(type,region) + sort_by_aspect(aspects)
     df=db.fetch_restaurants_by_sql(query)
     print("SQL Query: " + query)
-    return df
+
+    return df,query
 
 def detect_aspect(searchterms,item):
     array = []

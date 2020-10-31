@@ -6,14 +6,15 @@ def check_intent(intent,obj,location,graded_aspect):
     if (intent == "GetTime"): 
         dt=datetime.now(pytz.timezone('Asia/Singapore')).strftime('%A %Y-%m-%d %H:%M:%S')
         response = f'Currently, it is {dt}'
-        return response,""
+        return response,"",""
     elif (intent == "ExitApp"): 
         response = 'Bye! Have a nice day!'
-        return response,""
+        return response,"",""
     elif (intent == "GetFood"): 
         #response = f'Looking for {obj} restaurants with the best {graded_aspect} in the {location} of Singapore?' 
         response = "Please wait while we look for the best restaurants for you..."
-        return response,get_restaurant(obj,location,graded_aspect)
+        results,query = get_restaurant(obj,location,graded_aspect)
+        return response,results,query
 
 def detect_intent(model,request):
     request = request.lower()
@@ -38,7 +39,7 @@ def detect_intent(model,request):
     if get_time_condition: 
         intent = "GetTime"
         intent_detected = 1
-    elif get_food_condition and predicate_grammar and (get_food_not_condition == False):
+    elif (get_food_condition or request.find("how about") != -1) and (predicate_grammar) and (get_food_not_condition == False):
         intent = "GetFood"
         intent_detected = 1
     else:
@@ -53,11 +54,11 @@ def detect_intent(model,request):
     return intent_detected,intent,obj,location,graded_aspect
 
 def remove_stopwords(textarray):
-    for stopwords in ["a ","the ","good ","best ","delicious ","some ","marvellous ","fantastic ","decent ","nice "," side","very "," food"," restaurant"," restaurants"," cuisine","any ",","," any ","what "]: 
+    for stopwords in ["a ","the ","good ","best ","delicious ","some ","marvellous ","fantastic ","decent ","nice "," side","very "," food"," restaurant"," restaurants"," cuisine","any ",","," any ","what ","my "]: 
         textarray[:] = [x.replace(stopwords,"") for x in textarray]
     textarray[:] = [x.replace("town","central") for x in textarray]
 
-    for stopwords in ["place","me","you","restaurant","singapore","something","food","foods","eat","listen"]:
+    for stopwords in ["place","me","you","restaurant","singapore","something","food","foods","eat","listen","my"]:
         if stopwords in textarray: textarray.remove(stopwords)
 
     return textarray
@@ -74,7 +75,7 @@ def get_location(obj):
 def get_graded_aspect(obj):
     graded_aspect = ["food"] #food is by default
     wordlist_ambience = ["ambience","music","environment","peaceful","quiet","cozy"]
-    wordlist_service = ["kind staff","kind staffs","gentle staffs","friendly staffs","gentle staff","friendly staff","homely","welcoming","friendly","service"]
+    wordlist_service = ["kind staff","kind staffs","gentle staffs","friendly staffs","gentle staff","friendly staff","homely","welcoming","friendly","service","family"]
     wordlist_price = ["price","cheapest","cheap","inexpensive"]
     if (len(obj) != 0):
         for x in wordlist_ambience:
@@ -163,7 +164,7 @@ def detect_keyword(searchterms,item):
 
 def detect_specialfood(sentence,obj):
     replacefoodname = [["french fries","fries"],["fish and chips","fish"],["fish and chip","fish"]]
-    specialfoodlist = ["bak kut teh","fish head curry","curry fish head","cod fish","cod","chendol","satays","otak","sushi","fast food","fries","ramen","salted egg yolk","salted egg"]
+    specialfoodlist = ["bak kut teh","fish head curry","curry fish head","cod fish","cod","chendol","satays","otak","sushi","fast food","fries","ramen","salted egg yolk","salted egg","briyani"]
     found = [] 
     for x in replacefoodname:
         if (sentence.find(x[0]) != -1): sentence = sentence.replace(x[0],x[1])
