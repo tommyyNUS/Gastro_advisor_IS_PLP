@@ -19,7 +19,7 @@ To be completed...
 
 ## SECTION 3 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
 
-[Gastronomy Advisor Video](https://www.youtube.com/)
+[Gastronomy Advisor Video](https://youtu.be/Afgkgj_ujHo)
 
 ## SECTION 4 : USER GUIDE
 For a more detailed look at user guide, please refer to appendix 1 of the report for the user guide. 
@@ -99,10 +99,6 @@ Take note of the https link. It should look something like this "https://f34bb6f
 
 -----------------------------------------------------------------------------------------------------
 
-## SECTION 5 : PROJECT REPORT / PAPER
-
-[Download the Project Report](http://tiny.cc/q2m5nz)
-
-## SECTION 6 : MISCELLANEOUS
+## SECTION 5 : MISCELLANEOUS
 
 -----
