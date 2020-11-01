@@ -42,7 +42,7 @@ class BertSentiment:
 
     def __init__(self):
         if self._bert is None:
-            args.model_name_or_path = './model/finetuned_bert'
+            args.model_name_or_path = './model/fine_tuned_bert'
         
             #Configuration for the desired transformer model
             config = AutoConfig.from_pretrained(args.model_name_or_path)
