@@ -33,12 +33,11 @@ class BertSentiment:
             prob = prob.item()
             #print(sentence, "::", prob)
 
-            '''
             if prob > 0.5:
                 print( sentence +','+ "Positive" +','+ "%.2f" %(prob*100) + '%') 
             else:
                 print( sentence + ',' + "Negative" + ',' + "%.2f" %(100 - prob*100) +'%')
-            '''            
+
             return prob
 
     def __init__(self):
@@ -62,7 +61,7 @@ class BertSentiment:
             # initialize the tokenizer for the desired transformer model
             self._tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
         
-"""
+        
 if __name__ == "__main__":
     
     try:
@@ -80,4 +79,4 @@ if __name__ == "__main__":
     except:
         print("\n<<< An exception occurred >>>") 
         raise
-"""
+
